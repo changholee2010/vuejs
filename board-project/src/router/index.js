@@ -1,12 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import DataBindingView from "../views/NestedComponent.vue";
+import LoginView from "../views/KakaoLogin.vue";
 
 const routes = [
   {
     path: "/",
     name: "home",
     component: HomeView,
+  },
+  {
+    path: "/login",
+    name: "home",
+    component: LoginView,
   },
   {
     path: "/about",
@@ -16,11 +21,6 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
-  },
-  {
-    path: "/binding",
-    name: "Binding",
-    component: DataBindingView,
   },
 ];
 
