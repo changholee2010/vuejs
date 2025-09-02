@@ -37,8 +37,14 @@ export default {
   data() {
     return {
       user: { id: "", name: "" },
-      posts: [], // 게시글 데이터를 담는 반응형(reactive) 데이터
+      // posts: [], // 게시글 데이터를 담는 반응형(reactive) 데이터
     };
+  },
+  computed: {
+    // 계산된 속성.
+    posts() {
+      return this.$store.getters.getBoardList;
+    },
   },
   methods: {
     addPost(newPost) {
@@ -68,6 +74,7 @@ export default {
           // this.user = { id: email, name: nickname }; // 참조자체를 새로운 값.
           this.user.id = email; // 속성변경해야지만 참조값이 변경X
           this.user.name = nickname;
+          this.$store.commit("setId", email);
         },
         fail: (err) => {
           console.log(err);
@@ -79,6 +86,9 @@ export default {
     return {
       user: this.user,
     };
+  },
+  mounted() {
+    console.log(this.$store);
   },
 };
 </script>

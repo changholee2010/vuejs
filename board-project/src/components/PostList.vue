@@ -10,6 +10,7 @@
 
 <script>
 import PostItem from "./PostItem.vue";
+
 export default {
   data() {
     return {
