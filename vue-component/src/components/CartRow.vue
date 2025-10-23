@@ -24,7 +24,7 @@
 import { ref, watch } from "vue";
 
 // props
-const props = defineProps({
+const { code, item } = defineProps({
   code: String,
   item: Object,
 });
@@ -36,14 +36,14 @@ const emit = defineEmits(["update-qty", "remove"]);
 const localQty = ref(1);
 
 watch(
-  () => props.item.qty,
+  () => item.qty,
   (newQty) => (localQty.value = newQty),
   { immediate: true },
 );
 
 // 수량 변경 이벤트 emit
 const updateQty = () => {
-  emit("update-qty", props.code, { ...props.item, qty: localQty.value });
+  emit("update-qty", code, { ...item, qty: localQty.value });
 };
 </script>
 
