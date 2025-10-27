@@ -8,7 +8,7 @@ import axios from "axios";
 const customers = ref([]);
 
 axios
-  .get("http://192.168.0.15:3000/customers")
+  .get("http://localhost:3000/customers")
   .then((resp) => {
     console.log(resp);
     customers.value = resp.data;

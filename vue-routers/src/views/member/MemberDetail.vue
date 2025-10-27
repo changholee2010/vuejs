@@ -33,7 +33,7 @@ const props = defineProps({ id: Number });
 // const member = memberList.get(props.id);
 const member = ref({});
 axios
-  .get("http://192.168.0.15:3000/customer/" + props.id)
+  .get("http://localhost:3000/customer/" + props.id)
   .then((resp) => {
     console.log(resp);
     member.value = resp.data[0];
