@@ -1,39 +1,54 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import axios from "axios";
-// import { useRoute } from "vue-router";
+
+const API_BASE = "http://localhost:3000";
 
 export const usePostStore = defineStore("post", () => {
-  const posts = ref([]); // state
-
-  // getter : 가공된 state 반환.
+  // state.
+  const posts = ref([]);
+  // getters.
   const getPostById = computed(() => {
-    // const id = parseInt(useRoute().params.id); // 라우트 파라미터에서 id 가져오기
     return (id) => posts.value.find((post) => post.id === id);
   });
-
-  // action : 데이터변경.
+  // actions.
+  // Fetch all posts from the server.
+  const fetchPosts = async () => {
+    try {
+      const { data } = await axios.get(`${API_BASE}/boards`);
+      posts.value = data;
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+  // Add a new post to the server.
   const addPost = async (newPost) => {
     try {
-      const result = await axios.post("http://localhost:3000/board", { param: newPost });
-      posts.value.push({ ...newPost, id: result.data.insertId });
+      const { data } = await axios.post(`${API_BASE}/board`, { param: newPost });
+      posts.value.push({ ...newPost, id: data.insertId });
     } catch (error) {
       console.error("Error adding post:", error);
     }
   };
-
+  // Delete a post from the server.
   const deletePost = async (id) => {
-    console.log("deletePost called");
-    await axios.delete(`http://localhost:3000/board/${id}`); // DB에서 삭제
-    posts.value = posts.value.filter((post) => post.id !== id); // 로컬 상태에서 삭제
+    try {
+      await axios.delete(`${API_BASE}/board/${id}`);
+      posts.value = posts.value.filter((post) => post.id !== id);
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
   };
-
-  const fetchPosts = async () => {
-    const response = await axios.get("http://localhost:3000/boards");
-    posts.value = response.data;
+  // Update an existing post on the server.
+  const updatePost = async (id, updatedPost) => {
+    try {
+      await axios.put(`${API_BASE}/board/${id}`, updatedPost);
+      const index = posts.value.findIndex((post) => post.id === id);
+      if (index !== -1) posts.value[index] = { ...posts.value[index], ...updatedPost };
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
   };
-
-  // 수정처리.
-
-  return { posts, getPostById, addPost, deletePost, fetchPosts };
+  // expose.
+  return { posts, getPostById, fetchPosts, addPost, deletePost, updatePost };
 });
